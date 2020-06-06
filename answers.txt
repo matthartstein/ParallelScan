@@ -1,0 +1,37 @@
+----------------------------------------------------------------------------------
+Name:  Matthew S. Hartstein
+ID:    010567629
+Class: GPU Programming; Lab #6
+Date:  Spring 2020
+----------------------------------------------------------------------------------
+1.) Describe how you handled arrays not a power of two in size and all performance
+    enhancing optimizations you added:
+	-> I attempted to handle arrays not a power of two by extending the
+	   algorithm to scan large arrays of arbitraray (non-power-of-two)
+	   dimensions. This algorithm is based on the explanation provided by
+	   Belloch.
+	-> I attempted to divide the large array into blocks that each can be
+	   scanned by a single thread block, scan the blocks, and write the total
+	   sum of each block to another array of block sums. Then, I scanned the
+	   block sums, generated an array of block increments that are added to
+	   all elements in their respective blocks.
+	-> To handle non-power-of-two dimensions, I attempted to divide the array
+	   into a part that is a multiple of 'B' elements and process it by using
+	   B/2 threads per block, and process the remainder with a scan kernel
+	   modified to handle non-power-of-2 arrays in a single block.
+	-> This kernel pads the shared memory array used out to the next higher
+	   power of two and initializes this extra memory to zero while loading
+	   in the data from device memory.
+	   
+2.) Extra Notes:
+    -> As you can tell, no matter what input size you give to the program,
+       the kernel will always launch; even non-powers of 2 work as expected.
+    -> However, I was not able to figure out how to get my program to work
+       with inputs that are larger than [BLOCK_SIZE * 2] = 1024.
+    -> Therefore, all input numbers that range from 1 to 1024 will work as
+       expected, without a failed kernel launch, and passes each test!
+    -> I was not able to get my program to pass the test for numbers larger than 
+       1024, but the kernel will still launch for any given number that is given.
+    -> Despite not being able to use numbers larger than 1024, I am very happy
+       with the progress that was made and for the help Professor Huang provided
+       during his virtual lecture hours.
